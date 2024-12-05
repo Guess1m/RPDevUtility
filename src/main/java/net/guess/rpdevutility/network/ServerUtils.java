@@ -1,8 +1,4 @@
-package com.Guess.ReportsPlusServer.util.network;
-
-import com.Guess.ReportsPlusServer.util.log.LogUtils;
-import javafx.application.Platform;
-import javafx.scene.control.Label;
+package net.guess.rpdevutility.network;
 
 import java.io.*;
 import java.net.*;
@@ -11,48 +7,38 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import static com.Guess.ReportsPlusServer.util.log.LogUtils.log;
-import static com.Guess.ReportsPlusServer.util.network.FileUtils.*;
+import static net.guess.rpdevutility.network.FileUtils.watchForFileChanges;
 
 public class ServerUtils {
 	public static boolean isConnected = false;
+	public static int BROADCAST_PORT = 8888;
 	public static String pubINET;
 	public static String pubPORT;
 	public static ServerSocket serverSocket;
 	public static PrintWriter writer;
 	public static Socket clientSocket;
-	public static int BROADCAST_PORT;
-	private static ServerStatusListener statusListener;
 	private static ScheduledExecutorService broadcastExecutorService;
 	
-	public static void setStatusListener(ServerStatusListener listener) {
-		statusListener = listener;
-	}
-	
-	public static void startServer(int port, Label statusLabel) {
+	public static void startServer(int port) {
 		try {
-			log("Initializing server on port " + port, LogUtils.Severity.INFO);
+			System.out.println("Initializing server on port " + port);
 			serverSocket = new ServerSocket(port);
-			log("Server started successfully on port " + port, LogUtils.Severity.INFO);
-			
-			updateStatusLabel(statusLabel, "Server Started", "orange");
+			System.out.println("Server started successfully on port " + port);
 			
 			pubPORT = String.valueOf(port);
-			log("Waiting for a client connection on port " + port, LogUtils.Severity.INFO);
+			System.out.println("Waiting for a client connection on port " + port);
 			clientSocket = serverSocket.accept();
-			log("Client connected from " + clientSocket.getInetAddress().getHostAddress(), LogUtils.Severity.INFO);
-			handleClient(statusLabel);
+			System.out.println("Client connected from " + clientSocket.getInetAddress().getHostAddress());
+			handleClient();
 		} catch (BindException e) {
-			log("Port " + port + " is already in use.", LogUtils.Severity.WARN);
-			updateStatusLabel(statusLabel, "Port " + port + " is already in use.", "red");
+			System.out.println("Port " + port + " is already in use.");
 		} catch (IOException e) {
-			log("Error starting server: " + e.getMessage(), LogUtils.Severity.ERROR);
-			log("Stack trace: " + Arrays.toString(e.getStackTrace()), LogUtils.Severity.ERROR);
-			updateStatusLabel(statusLabel, "Error starting server.", "red");
+			System.out.println("Error starting server: " + e.getMessage());
+			System.out.println("Stack trace: " + Arrays.toString(e.getStackTrace()));
 		} finally {
-			log("Server stopping.", LogUtils.Severity.INFO);
+			System.out.println("Server stopping.");
 			stopServer();
-			log("Server stopped.", LogUtils.Severity.INFO);
+			System.out.println("Server stopped.");
 		}
 	}
 	
@@ -68,10 +54,9 @@ public class ServerUtils {
 					                                           InetAddress.getByName("255.255.255.255"),
 					                                           BROADCAST_PORT);
 					socket.send(packet);
-					log("Broadcasted server on port: " + port + " Using port: " + BROADCAST_PORT,
-					    LogUtils.Severity.INFO);
+					System.out.println("Broadcasted server on port: " + port + " Using port: " + BROADCAST_PORT);
 				} catch (IOException e) {
-					log("Error broadcasting server availability: " + e.getMessage(), LogUtils.Severity.ERROR);
+					System.out.println("Error broadcasting server availability: " + e.getMessage());
 				}
 			}
 		}, 0, 5, TimeUnit.SECONDS);
@@ -80,7 +65,7 @@ public class ServerUtils {
 	public static void stopBroadcasting() {
 		if (broadcastExecutorService != null && !broadcastExecutorService.isShutdown()) {
 			broadcastExecutorService.shutdown();
-			log("Broadcasting stopped", LogUtils.Severity.INFO);
+			System.out.println("Broadcasting stopped");
 		}
 	}
 	
@@ -88,9 +73,9 @@ public class ServerUtils {
 		if (clientSocket != null && !clientSocket.isClosed()) {
 			try {
 				clientSocket.close();
-				log("Client socket closed", LogUtils.Severity.INFO);
+				System.out.println("Client socket closed");
 			} catch (IOException e) {
-				log("Error closing client socket: " + e.getMessage(), LogUtils.Severity.ERROR);
+				System.out.println("Error closing client socket: " + e.getMessage());
 			}
 		}
 	}
@@ -98,7 +83,7 @@ public class ServerUtils {
 	public static void sendShutdownMessage() {
 		if (writer != null) {
 			writer.println("SHUTDOWN");
-			log("Shutdown message sent to client", LogUtils.Severity.INFO);
+			System.out.println("Shutdown message sent to client");
 		}
 	}
 	
@@ -107,24 +92,22 @@ public class ServerUtils {
 			if (serverSocket != null && !serverSocket.isClosed()) {
 				sendShutdownMessage();
 				serverSocket.close();
-				log("Closed ServerSocket", LogUtils.Severity.INFO);
+				System.out.println("Closed ServerSocket");
 				disconnectClient();
-				log("Disconnected Client", LogUtils.Severity.INFO);
+				System.out.println("Disconnected Client");
 				stopBroadcasting();
 			}
 		} catch (IOException e) {
-			log("Error closing server socket: " + e.getMessage(), LogUtils.Severity.ERROR);
+			System.out.println("Error closing server socket: " + e.getMessage());
 		}
 	}
 	
-	private static void handleClient(Label statusLabel) {
+	private static void handleClient() {
 		try {
-			log("Client connected from: " + clientSocket.getInetAddress(), LogUtils.Severity.INFO);
+			System.out.println("Client connected from: " + clientSocket.getInetAddress());
 			isConnected = true;
-			notifyStatusChanged(isConnected);
 			pubINET = String.valueOf(clientSocket.getInetAddress());
-			updateStatusLabel(statusLabel, "Client Connected", "green");
-			log("Watching for file changes", LogUtils.Severity.DEBUG);
+			System.out.println("Watching for file changes");
 			
 			startFileWatchers();
 			
@@ -140,49 +123,33 @@ public class ServerUtils {
 						handleClientDisconnection(executor);
 					}
 				} catch (Exception e) {
-					log("Error sending heartbeat: " + e.getMessage(), LogUtils.Severity.ERROR);
+					System.out.println("Error sending heartbeat: " + e.getMessage());
 				}
 			}, 0, 5, TimeUnit.SECONDS);
 			
 			String inputLine;
 			while ((inputLine = reader.readLine()) != null) {
 				if (inputLine.equals("HEARTBEAT")) {
-					log("Received heartbeat from client", LogUtils.Severity.DEBUG);
+					System.out.println("Received heartbeat from client");
 					writer.println("HEARTBEAT");
 				}
 			}
 		} catch (SocketException e) {
-			log("Client disconnected", LogUtils.Severity.WARN);
-			updateStatusLabel(statusLabel, "Client Disconnected", "#ff5e5e");
+			System.out.println("Client disconnected");
 			isConnected = false;
-			notifyStatusChanged(isConnected);
 		} catch (IOException e) {
-			log("Error with client connection: " + e.getMessage(), LogUtils.Severity.ERROR);
+			System.out.println("Error with client connection: " + e.getMessage());
 		} finally {
 			disconnectClient();
 		}
 	}
 	
-	public static void runStartServerRefresh(Label statusLabel, int port) {
+	public static void runStartServerRefresh(int port) {
 		if (!isConnected) {
-			new Thread(() -> startServer(port, statusLabel)).start();
+			new Thread(() -> startServer(port)).start();
 		} else {
-			log("Already connected", LogUtils.Severity.WARN);
+			System.out.println("Already connected");
 		}
-	}
-	
-	private static void notifyStatusChanged(boolean isConnected) {
-		if (statusListener != null) {
-			log("Server Connection Status Changed: " + isConnected, LogUtils.Severity.DEBUG);
-			Platform.runLater(() -> statusListener.onStatusChanged(isConnected));
-		}
-	}
-	
-	private static void updateStatusLabel(Label statusLabel, String text, String color) {
-		Platform.runLater(() -> {
-			statusLabel.setText(text);
-			statusLabel.setStyle("-fx-background-color: " + color + ";");
-		});
 	}
 	
 	private static void startFileWatchers() {
@@ -196,11 +163,9 @@ public class ServerUtils {
 	}
 	
 	private static void handleClientDisconnection(ScheduledExecutorService executor) {
-		log("Client Heartbeat Lost", LogUtils.Severity.WARN);
+		System.out.println("Client Heartbeat Lost");
 		isConnected = false;
-		notifyStatusChanged(isConnected);
 		executor.shutdown();
-		log("Client Heartbeat check stopped", LogUtils.Severity.INFO);
+		System.out.println("Client Heartbeat check stopped");
 	}
 }
-
