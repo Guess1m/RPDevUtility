@@ -10,5 +10,9 @@
     </padding>
     <children>
         <Button mnemonicParsing="false" onAction="#updateID" text="UPDATE_ID"/>
+        <Button layoutX="135.0" layoutY="173.0" mnemonicParsing="false" onAction="#updateCallout"
+                text="UPDATE_CALLOUT"/>
+        <Button mnemonicParsing="false" onAction="#updateTrafficStop" text="UPDATE_TRAFFIC_STOP"/>
+        <Button mnemonicParsing="false" onAction="#updateLocation" text="UPDATE_LOCATION"/>
     </children>
 </VBox>
