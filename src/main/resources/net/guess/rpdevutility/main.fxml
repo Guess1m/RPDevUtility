@@ -1,18 +1,260 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.layout.VBox?>
-<VBox xmlns:fx="http://javafx.com/fxml/1" alignment="CENTER" prefHeight="351.0" prefWidth="333.0" spacing="20.0"
-      xmlns="http://javafx.com/javafx/21" fx:controller="net.guess.rpdevutility.MainController">
-    <padding>
-        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
-    </padding>
-    <children>
-        <Button mnemonicParsing="false" onAction="#updateID" text="UPDATE_ID"/>
-        <Button layoutX="135.0" layoutY="173.0" mnemonicParsing="false" onAction="#updateCallout"
-                text="UPDATE_CALLOUT"/>
-        <Button mnemonicParsing="false" onAction="#updateTrafficStop" text="UPDATE_TRAFFIC_STOP"/>
-        <Button mnemonicParsing="false" onAction="#updateLocation" text="UPDATE_LOCATION"/>
-    </children>
-</VBox>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<TabPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="429.0" prefWidth="287.0" stylesheets="@styles.css"
+         tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/23.0.1"
+         fx:controller="net.guess.rpdevutility.MainController">
+   <tabs>
+      <Tab text="Main">
+         <content>
+             <VBox alignment="CENTER" spacing="20.0">
+                 <children>
+                     <Label text="Base Messages:">
+                         <font>
+                             <Font name="System Bold" size="20.0"/>
+                         </font>
+                     </Label>
+                     <TilePane alignment="CENTER" hgap="10.0" prefColumns="1" vgap="50.0">
+                         <children>
+                             <Button mnemonicParsing="false" onAction="#updateID" text="UPDATE_ID"/>
+                             <Button mnemonicParsing="false" onAction="#updateCallout" text="UPDATE_CALLOUT"/>
+                             <Button mnemonicParsing="false" onAction="#updateTrafficStop" text="UPDATE_TRAFFIC_STOP"/>
+                             <Button mnemonicParsing="false" onAction="#updateLocation" text="UPDATE_LOCATION"/>
+                         </children>
+                     </TilePane>
+                 </children>
+             </VBox>
+         </content>
+      </Tab>
+      <Tab text="WorldPed">
+         <content>
+            <VBox alignment="CENTER" prefHeight="351.0" prefWidth="333.0" spacing="20.0">
+               <padding>
+                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+               </padding>
+               <children>
+                  <VBox>
+                     <children>
+                        <Label text="Name:">
+                           <font>
+                              <Font name="System Bold" size="15.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets bottom="5.0" />
+                           </VBox.margin>
+                        </Label>
+                        <HBox>
+                           <children>
+                              <BorderPane HBox.hgrow="ALWAYS">
+                                 <center>
+                                    <TextField fx:id="WPName" text="z d" BorderPane.alignment="CENTER" />
+                                 </center>
+                              </BorderPane>
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+                  <VBox>
+                     <children>
+                        <Label text="License Status">
+                           <font>
+                              <Font name="System Bold" size="15.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets bottom="5.0" />
+                           </VBox.margin>
+                        </Label>
+                        <HBox>
+                           <children>
+                              <VBox spacing="5.0" HBox.hgrow="ALWAYS">
+                                 <children>
+                                    <ToggleButton fx:id="LicNone" mnemonicParsing="false" text="None">
+                                       <toggleGroup>
+                                          <ToggleGroup fx:id="licStatus" />
+                                       </toggleGroup></ToggleButton>
+                                    <ToggleButton fx:id="LicUnlicensed" mnemonicParsing="false" text="Unlicensed" toggleGroup="$licStatus" />
+                                    <ToggleButton fx:id="LicExpired" mnemonicParsing="false" text="Expired" toggleGroup="$licStatus" />
+                                    <ToggleButton fx:id="LicValid" mnemonicParsing="false" text="Valid" toggleGroup="$licStatus" />
+                                    <ToggleButton fx:id="LicSuspended" mnemonicParsing="false" text="Suspended" toggleGroup="$licStatus" />
+                                 </children>
+                              </VBox>
+                              <BorderPane HBox.hgrow="ALWAYS">
+                                 <center>
+                                    <ToggleButton fx:id="LicRandom" alignment="CENTER_RIGHT" mnemonicParsing="false" selected="true" text="Random" toggleGroup="$licStatus" BorderPane.alignment="TOP_CENTER">
+                                       <BorderPane.margin>
+                                          <Insets />
+                                       </BorderPane.margin>
+                                    </ToggleButton>
+                                 </center>
+                              </BorderPane>
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+                  <VBox>
+                     <children>
+                        <Label text="Wanted Status">
+                           <font>
+                              <Font name="System Bold" size="15.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets bottom="5.0" />
+                           </VBox.margin>
+                        </Label>
+                        <HBox>
+                           <children>
+                              <VBox spacing="5.0" HBox.hgrow="ALWAYS">
+                                 <children>
+                                    <ToggleButton fx:id="wantedTrue" mnemonicParsing="false" text="True">
+                                       <toggleGroup>
+                                          <ToggleGroup fx:id="wantedStatus" />
+                                       </toggleGroup></ToggleButton>
+                                 </children>
+                              </VBox>
+                              <BorderPane HBox.hgrow="ALWAYS">
+                                 <center>
+                                    <ToggleButton fx:id="wantedFalse" alignment="CENTER_RIGHT" mnemonicParsing="false" selected="true" text="False" toggleGroup="$wantedStatus" BorderPane.alignment="TOP_CENTER">
+                                       <BorderPane.margin>
+                                          <Insets />
+                                       </BorderPane.margin>
+                                    </ToggleButton>
+                                 </center>
+                              </BorderPane>
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+                  <BorderPane VBox.vgrow="SOMETIMES">
+                     <center>
+                        <Button alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#updateWorldPed" text="UPDATE WORLDPED" />
+                     </center>
+                  </BorderPane>
+               </children>
+            </VBox>
+         </content>
+      </Tab>
+       <Tab text="WorldVeh">
+           <content>
+               <VBox alignment="CENTER" prefWidth="189.0" spacing="20.0">
+                   <padding>
+                       <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+                   </padding>
+                   <children>
+                       <VBox>
+                           <children>
+                               <Label text="Plate:">
+                                   <font>
+                                       <Font name="System Bold" size="15.0"/>
+                                   </font>
+                                   <VBox.margin>
+                                       <Insets bottom="5.0"/>
+                                   </VBox.margin>
+                               </Label>
+                               <HBox>
+                                   <children>
+                                       <BorderPane HBox.hgrow="ALWAYS">
+                                           <center>
+                                               <TextField fx:id="WVPlate" text="1234" BorderPane.alignment="CENTER"/>
+                                           </center>
+                                       </BorderPane>
+                                   </children>
+                               </HBox>
+                           </children>
+                       </VBox>
+                       <VBox>
+                           <children>
+                               <Label text="Registration">
+                                   <font>
+                                       <Font name="System Bold" size="15.0"/>
+                                   </font>
+                                   <VBox.margin>
+                                       <Insets bottom="5.0"/>
+                                   </VBox.margin>
+                               </Label>
+                               <HBox>
+                                   <children>
+                                       <VBox spacing="5.0" HBox.hgrow="ALWAYS">
+                                           <children>
+                                               <ToggleButton fx:id="regNone" mnemonicParsing="false" text="None">
+                                                   <toggleGroup>
+                                                       <ToggleGroup fx:id="licStatus1"/>
+                                                   </toggleGroup>
+                                               </ToggleButton>
+                                               <ToggleButton fx:id="regExpired" mnemonicParsing="false" text="Expired"
+                                                             toggleGroup="$licStatus1"/>
+                                               <ToggleButton fx:id="regValid" mnemonicParsing="false" text="Valid"
+                                                             toggleGroup="$licStatus1"/>
+                                           </children>
+                                       </VBox>
+                                       <BorderPane HBox.hgrow="ALWAYS">
+                                           <center>
+                                               <ToggleButton fx:id="regRandom" alignment="CENTER_RIGHT"
+                                                             mnemonicParsing="false" selected="true" text="Random"
+                                                             toggleGroup="$licStatus1"
+                                                             BorderPane.alignment="TOP_CENTER">
+                                                   <BorderPane.margin>
+                                                       <Insets/>
+                                                   </BorderPane.margin>
+                                               </ToggleButton>
+                                           </center>
+                                       </BorderPane>
+                                   </children>
+                               </HBox>
+                           </children>
+                       </VBox>
+                       <VBox>
+                           <children>
+                               <Label text="Insurance">
+                                   <font>
+                                       <Font name="System Bold" size="15.0"/>
+                                   </font>
+                                   <VBox.margin>
+                                       <Insets bottom="5.0"/>
+                                   </VBox.margin>
+                               </Label>
+                               <HBox>
+                                   <children>
+                                       <VBox spacing="5.0" HBox.hgrow="ALWAYS">
+                                           <children>
+                                               <ToggleButton fx:id="insNone" mnemonicParsing="false" text="None">
+                                                   <toggleGroup>
+                                                       <ToggleGroup fx:id="licStatus11"/>
+                                                   </toggleGroup>
+                                               </ToggleButton>
+                                               <ToggleButton fx:id="insExpired" mnemonicParsing="false" text="Expired"
+                                                             toggleGroup="$licStatus11"/>
+                                               <ToggleButton fx:id="insValid" mnemonicParsing="false" text="Valid"
+                                                             toggleGroup="$licStatus11"/>
+                                           </children>
+                                       </VBox>
+                                       <BorderPane HBox.hgrow="ALWAYS">
+                                           <center>
+                                               <ToggleButton fx:id="insRandom" alignment="CENTER_RIGHT"
+                                                             mnemonicParsing="false" selected="true" text="Random"
+                                                             toggleGroup="$licStatus11"
+                                                             BorderPane.alignment="TOP_CENTER">
+                                                   <BorderPane.margin>
+                                                       <Insets/>
+                                                   </BorderPane.margin>
+                                               </ToggleButton>
+                                           </center>
+                                       </BorderPane>
+                                   </children>
+                               </HBox>
+                           </children>
+                       </VBox>
+                       <BorderPane VBox.vgrow="SOMETIMES">
+                           <center>
+                               <Button alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#updateWorldVeh"
+                                       text="UPDATE WORLDVEH"/>
+                           </center>
+                       </BorderPane>
+                   </children>
+               </VBox>
+           </content>
+       </Tab>
+   </tabs>
+</TabPane>

@@ -2,6 +2,9 @@ package net.guess.rpdevutility;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
 import net.guess.rpdevutility.network.ServerUtils;
 
 import java.io.BufferedWriter;
@@ -19,6 +22,50 @@ import static net.guess.rpdevutility.network.ServerUtils.isConnected;
 
 public class MainController {
 	int NumberCount = 0;
+	@javafx.fxml.FXML
+	private ToggleButton LicNone;
+	@javafx.fxml.FXML
+	private ToggleButton wantedFalse;
+	@javafx.fxml.FXML
+	private ToggleButton LicRandom;
+	@javafx.fxml.FXML
+	private ToggleGroup wantedStatus;
+	@javafx.fxml.FXML
+	private ToggleButton wantedTrue;
+	@javafx.fxml.FXML
+	private ToggleButton LicValid;
+	@javafx.fxml.FXML
+	private ToggleButton LicUnlicensed;
+	@javafx.fxml.FXML
+	private ToggleGroup licStatus;
+	@javafx.fxml.FXML
+	private ToggleButton LicExpired;
+	@javafx.fxml.FXML
+	private ToggleButton LicSuspended;
+	@javafx.fxml.FXML
+	private TextField WPName;
+	@javafx.fxml.FXML
+	private ToggleButton regValid;
+	@javafx.fxml.FXML
+	private ToggleButton insValid;
+	@javafx.fxml.FXML
+	private ToggleButton insRandom;
+	@javafx.fxml.FXML
+	private ToggleButton insExpired;
+	@javafx.fxml.FXML
+	private ToggleButton regExpired;
+	@javafx.fxml.FXML
+	private TextField WVPlate;
+	@javafx.fxml.FXML
+	private ToggleButton insNone;
+	@javafx.fxml.FXML
+	private ToggleButton regNone;
+	@javafx.fxml.FXML
+	private ToggleGroup licStatus11;
+	@javafx.fxml.FXML
+	private ToggleButton regRandom;
+	@javafx.fxml.FXML
+	private ToggleGroup licStatus1;
 	
 	public void initialize() {
 		Platform.runLater(() -> {
@@ -244,4 +291,145 @@ public class MainController {
 			}
 		}
 	}
+	
+	@javafx.fxml.FXML
+	public void updateWorldPed(ActionEvent actionEvent) {
+		if (isConnected) {
+			Random random = new Random();
+			
+			String name = WPName.getText().trim();
+			
+			// Generate random license number
+			String licenseNumber = String.valueOf(NumberCount++);
+			
+			// Generate random ped model
+			String[] pedModels = {"A_M_M_TRAMP_01", "A_F_Y_HIPSTER_02", "A_M_Y_BUSINESS_01", "A_F_M_FATWHITE_01"};
+			String pedModel = pedModels[random.nextInt(pedModels.length)];
+			
+			// Generate random birthday
+			int year = 1950 + random.nextInt(50);
+			int month = 1 + random.nextInt(12);
+			int day = 1 + random.nextInt(LocalDate.of(year, month, 1).lengthOfMonth());
+			String birthday = month + "/" + day + "/" + year;
+			
+			// Generate random gender
+			String gender = random.nextBoolean() ? "Male" : "Female";
+			
+			// Generate random address
+			String[] streets = {"North Calafia Way", "Grove Street", "Mirror Park Blvd", "Vinewood Blvd", "Senora Rd"};
+			String address = (100 + random.nextInt(900)) + " " + streets[random.nextInt(streets.length)];
+			
+			// Generate random wanted status
+			String isWanted = wantedTrue.isSelected() ? "True" : "False";
+			
+			// Generate random license status
+			String licenseStatus = null;
+			if (LicExpired.isSelected()) licenseStatus = "Expired";
+			if (LicNone.isSelected()) licenseStatus = "None";
+			if (LicSuspended.isSelected()) licenseStatus = "Suspended";
+			if (LicUnlicensed.isSelected()) licenseStatus = "Unlicensed";
+			if (LicValid.isSelected()) licenseStatus = "Valid";
+			if (LicRandom.isSelected()) {
+				String[] Statuses = {"Expired","None","Suspended","Valid","Unlicensed"};
+				licenseStatus = Statuses[random.nextInt(Statuses.length)];
+			}
+			
+			// Generate random relationship group
+			String[] relationshipGroups = {"NO_RELATIONSHIP", "CIVMALE", "CIVFEMALE", "GANG"};
+			String relationshipGroup = relationshipGroups[random.nextInt(relationshipGroups.length)];
+			
+			// Construct formatted output
+			String output = "name=" + name +
+					"&licenseNumber=" + licenseNumber +
+					"&pedModel=" + pedModel +
+					"&birthday=" + birthday +
+					"&gender=" + gender +
+					"&address=" + address +
+					"&isWanted=" + isWanted +
+					"&licenseStatus=" + licenseStatus +
+					"&relationshipGroup=" + relationshipGroup+",";
+			
+			String filePath = getJarPath() + "/data/worldPeds.data";
+			
+			// Write the formatted data to a file
+			try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true))) {
+				writer.append(output);
+				System.out.println("Random World Ped updated");
+			} catch (IOException e) {
+				System.err.println("Error writing World Ped data to file: " + e.getMessage());
+			}
+		}
+	}
+	
+	@javafx.fxml.FXML
+	public void updateWorldVeh(ActionEvent actionEvent) {
+		if (isConnected) {
+			Random random = new Random();
+			
+			// Generate random license plate
+			String licensePlate = WVPlate.getText().trim();
+			
+			// Generate random model
+			String[] models = {"BALLER2", "SULTAN", "DOMINATOR", "ASTEROPE", "BUFFALO", "ELEGY", "FELTZER"};
+			String model = models[random.nextInt(models.length)];
+			
+			// Random stolen status
+			String isStolen = random.nextBoolean() ? "True" : "False";
+			
+			// Random police vehicle status
+			String isPolice = random.nextBoolean() ? "True" : "False";
+			
+			// Generate random owner
+			String[] firstNames = {"Carlos", "Jessica", "Michael", "Sarah", "David", "Emily", "Chris", "Anna"};
+			String[] lastNames = {"Casanova", "Smith", "Johnson", "Brown", "Taylor", "Anderson", "Lee", "Wilson"};
+			String owner = firstNames[random.nextInt(firstNames.length)] + " " + lastNames[random.nextInt(
+					lastNames.length)];
+			
+			// Generate random driver
+			String driver = random.nextBoolean() ? firstNames[random.nextInt(
+					firstNames.length)] + " " + lastNames[random.nextInt(lastNames.length)] : "";
+			
+			// Registration
+			String regStatus = getValue(random, regExpired, regNone, regValid, regRandom);
+			
+			// Insurance
+			String insStatus = getValue(random, insExpired, insNone, insValid, insRandom);
+			
+			// Generate random color in RGB format
+			String color = String.format("%02X-%02X-%02X", random.nextInt(256), random.nextInt(256),
+			                             random.nextInt(256));
+			
+			// Combine data into the required format
+			String vehicleData = "licensePlate=" + licensePlate + "&model=" + model + "&isStolen=" + isStolen + "&isPolice=" + isPolice + "&owner=" + owner + "&driver=" + driver + "&registration=" + regStatus + "&insurance=" + insStatus + "&color=" + color + ",";
+			
+			// Write the data to a file
+			String filePath = getJarPath() + "/data/worldCars.data";
+			
+			try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true))) {
+				writer.append(vehicleData);
+				System.out.println("World Vehicle updated");
+			} catch (IOException e) {
+				System.err.println("Error writing world vehicle data to file: " + e.getMessage());
+			}
+		}
+	}
+	
+	private String getValue(Random random, ToggleButton regExpired, ToggleButton regNone, ToggleButton regValid, ToggleButton regRandom) {
+		String regStatus = null;
+		if (regExpired.isSelected()) {
+			regStatus = "Expired";
+		}
+		if (regNone.isSelected()) {
+			regStatus = "None";
+		}
+		if (regValid.isSelected()) {
+			regStatus = "Valid";
+		}
+		if (regRandom.isSelected()) {
+			String[] registrationStatuses = {"Valid", "Expired", "None"};
+			regStatus = registrationStatuses[random.nextInt(registrationStatuses.length)];
+		}
+		return regStatus;
+	}
+	
 }
