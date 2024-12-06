@@ -18,6 +18,7 @@ public class MainApplication extends Application {
 		Scene scene = new Scene(fxmlLoader.load());
 		stage.setTitle("RP Developer Tool");
 		stage.setScene(scene);
+		stage.setAlwaysOnTop(true);
 		stage.show();
 	}
 }

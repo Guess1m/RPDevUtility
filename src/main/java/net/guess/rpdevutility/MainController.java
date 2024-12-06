@@ -260,8 +260,9 @@ public class MainController {
 					lastNames.length)];
 			
 			// Random registration and insurance status
-			String registration = random.nextBoolean() ? "Valid" : "Expired";
-			String insurance = random.nextBoolean() ? "Valid" : "Expired";
+			String[] status = {"Valid", "Expired", "None"};
+			String registration = status[random.nextInt(status.length)];
+			String insurance = status[random.nextInt(status.length)];
 			
 			// Random color in RGB format
 			int red = 30 + random.nextInt(226); // Ensure non-black and non-white colors

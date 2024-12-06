@@ -11,35 +11,47 @@
 
 TilePane, VBox {
     -fx-background-color: -background;
+    -fx-focus-color: transparent;
 }
 
 TabPane .tab-header-area .tab-header-background {
     -fx-background-color: -background-dark;
+    -fx-focus-color: transparent;
 }
 
 TabPane .tab-header-area .tab {
     -fx-background-color: -background;
+    -fx-effect: none;
+    -fx-focus-color: transparent;
+}
+
+TabPane .tab-header-area .tab:selected {
+    -fx-background-color: -selected;
+    -fx-effect: none;
+    -fx-focus-color: transparent;
 }
 
 TabPane .tab-header-area .tab .tab-container .tab-label {
     -fx-text-fill: -txt;
     -fx-font-weight: bold;
     -fx-padding: 3;
+    -fx-effect: none;
+    -fx-focus-color: transparent;
 }
 
 .text-field {
     -fx-text-fill: -txt;
-    -fx-background-color: transparent;
+    -fx-background-color: rgb(0, 0, 0, 0.05);
     -fx-border-color: #405760;
     -fx-border-width: 0 0 1.5 0;
 }
 
 .text-field:hover {
-    -fx-background-color: rgb(0, 0, 0, 0.05);
+    -fx-background-color: rgb(0, 0, 0, 0.1);
 }
 
 .text-field:focused {
-    -fx-background-color: rgb(0, 0, 0, 0.1);
+    -fx-background-color: rgb(0, 0, 0, 0.15);
 }
 
 .button {
@@ -70,7 +82,6 @@ TabPane .tab-header-area .tab .tab-container .tab-label {
 .toggle-button:hover {
     -fx-background-color: -hover;
 }
-
 
 .label {
     -fx-text-fill: -txt;
