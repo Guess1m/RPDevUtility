@@ -131,7 +131,6 @@ public class ServerUtils {
 			while ((inputLine = reader.readLine()) != null) {
 				if (inputLine.equals("HEARTBEAT")) {
 					System.out.println("Received heartbeat from client");
-					writer.println("HEARTBEAT");
 				}
 			}
 		} catch (SocketException e) {
