@@ -232,14 +232,14 @@ public class MainController {
 			// Combine into location string
 			String locationData = street + ", " + area + ", " + county;
 			
-			String filePath = getJarPath() + "/data/location.data";
+			String filePath = getJarPath() + "/data/gameData.data";
 			
 			// Write the generated location data to a file
 			try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
-				writer.write(locationData);
+				writer.write("location="+locationData+"|time="+random.nextInt(1,9)+":"+random.nextInt(1,9)+random.nextInt(1,9)+" PM");
 				System.out.println("Random Location updated: " + locationData);
 			} catch (IOException e) {
-				System.err.println("Error writing location data to file: " + e.getMessage());
+				System.err.println("Error writing game data to file: " + e.getMessage());
 			}
 		}
 	}

@@ -13,18 +13,51 @@ public class FileUtils {
 	static boolean idUpdateBufferActive = false;
 	
 	public static synchronized void sendFileToClient(String fileToSend) throws IOException {
-		try (Socket sock = ServerUtils.serverSocket.accept(); FileInputStream fis = new FileInputStream(
-				fileToSend); BufferedInputStream bis = new BufferedInputStream(
-				fis); OutputStream os = sock.getOutputStream()) {
+		Socket sock = null;
+		try (FileInputStream fis = new FileInputStream(fileToSend);
+		     BufferedInputStream bis = new BufferedInputStream(fis)) {
 			
-			byte[] mybytearray = new byte[(int) new File(fileToSend).length()];
-			bis.read(mybytearray, 0, mybytearray.length);
-			System.out.println("Sending " + fileToSend + "(" + mybytearray.length + " bytes)");
+			sock = ServerUtils.serverSocket.accept();
+			System.out.println("Client connected: " + sock.getInetAddress().getHostAddress());
+			
+			OutputStream os = sock.getOutputStream();
+			File file = new File(fileToSend);
+			
+			if (!file.exists() || !file.isFile()) {
+				System.out.println("Error: File " + fileToSend + " does not exist or is not a valid file.");
+				return;
+			}
+			
+			byte[] mybytearray = new byte[(int) file.length()];
+			int bytesRead = bis.read(mybytearray, 0, mybytearray.length);
+			
+			if (bytesRead > 0) {
+				System.out.println("Read " + bytesRead + " bytes from " + fileToSend);
+			} else {
+				System.out.println("No bytes read from the file. Check the file content.");
+			}
+			
+			System.out.println("Sending " + fileToSend + " (" + mybytearray.length + " bytes) to client...");
 			os.write(mybytearray, 0, mybytearray.length);
 			os.flush();
-			System.out.println("Sent.");
+			System.out.println("File " + fileToSend + " successfully sent to client.");
+		} catch (IOException e) {
+			System.out.println("An error occurred during file transfer: " + e.getMessage());
+			e.printStackTrace();
+			throw e;
+		} finally {
+			if (sock != null) {
+				try {
+					sock.close();
+					System.out.println("Socket connection closed.");
+				} catch (IOException e) {
+					System.out.println("Error closing socket connection: " + e.getMessage());
+					e.printStackTrace();
+				}
+			}
 		}
 	}
+	
 	
 	public static void watchForIDChanges(String directoryPath, String fileNameToWatch) {
 		Path dir = Paths.get(directoryPath);
@@ -181,6 +214,7 @@ public class FileUtils {
 		deleteFile("worldPeds.data");
 		deleteFile("worldCars.data");
 		deleteFile("location.data");
+		deleteFile("gameData.data");
 		deleteFile("trafficStop.data");
 	}
 	
@@ -189,7 +223,7 @@ public class FileUtils {
 		createFile("callout.xml");
 		createFile("worldPeds.data");
 		createFile("worldCars.data");
-		createFile("location.data");
+		createFile("gameData.data");
 		createFile("trafficStop.data");
 	}
 	
