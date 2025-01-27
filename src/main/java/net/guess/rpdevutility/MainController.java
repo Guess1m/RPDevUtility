@@ -99,54 +99,52 @@ public class MainController {
 		if (isConnected) {
 			Random random = new Random();
 			
-			// Random name
+			// Generate random name
 			String[] firstNames = {"John", "Jane", "Michael", "Emily", "David", "Sarah", "Chris", "Anna"};
 			String[] lastNames = {"Smith", "Johnson", "Brown", "Taylor", "Anderson", "Lee", "Wilson", "Martin"};
 			String name = firstNames[random.nextInt(firstNames.length)] + " " + lastNames[random.nextInt(
 					lastNames.length)];
 			
-			// Random birthday
-			int year = 1950 + random.nextInt(60); // Random year between 1950 and 2009
-			int month = 1 + random.nextInt(12);  // Random month
-			int day = 1 + random.nextInt(LocalDate.of(year, month, 1).lengthOfMonth()); // Valid day for month/year
+			// Generate random birthday
+			int year = 1950 + random.nextInt(60);
+			int month = 1 + random.nextInt(12);
+			int day = 1 + random.nextInt(LocalDate.of(year, month, 1).lengthOfMonth());
 			String birthday = LocalDate.of(year, month, day).format(DateTimeFormatter.ofPattern("MM/dd/yyyy"));
 			
-			// Random gender
+			// Generate random gender
 			String gender = random.nextBoolean() ? "Male" : "Female";
 			
-			// Random address
+			// Generate random address
 			String[] streets = {"Main St", "Elm St", "Park Ave", "Broadway", "Maple St", "Cedar Ave", "Pine Dr", "Oak St"};
 			String[] cities = {"Springfield", "Riverside", "Centerville", "Georgetown", "Fairview", "Franklin", "Greenville"};
 			String address = (100 + random.nextInt(900)) + " " + streets[random.nextInt(
 					streets.length)] + ", " + cities[random.nextInt(cities.length)];
 			
-			// Random PedModel and LicenseNumber
+			// Generate random PedModel and LicenseNumber
 			String[] pedModels = {"A_M_M_SALTON_01", "A_F_M_SALTON_01", "A_M_M_SALTON_02"};
 			String pedModel = pedModels[random.nextInt(pedModels.length)];
-			String licenseNumber = String.valueOf(1000000000L + random.nextLong(9000000000L)); // Random license number
+			String licenseNumber = String.valueOf(1000000000L + random.nextLong(9000000000L));
 			
-			// Random image address
-			String imageAddress = "ID Number: " + NumberCount++;
-			
-			String xmlContent = """
-					<?xml version="1.0" encoding="utf-8"?>
-					<IDs>
-					  <ID>
-					    <Name>%s</Name>
-					    <Birthday>%s</Birthday>
-					    <Gender>%s</Gender>
-					    <Address>%s</Address>
-					    <PedModel>%s</PedModel>
-					    <LicenseNumber>%s</LicenseNumber>
-					  </ID>
-					</IDs>
-					""".formatted(name, birthday, gender, address, pedModel, licenseNumber);
+			// Generate XML content
+			String xmlContent = String.format("""
+					                                      <?xml version="1.0" encoding="utf-8"?>
+					                                      <IDs>
+					                                        <ID>
+					                                          <Name>%s</Name>
+					                                          <Birthday>%s</Birthday>
+					                                          <Gender>%s</Gender>
+					                                          <Address>%s</Address>
+					                                          <PedModel>%s</PedModel>
+					                                          <LicenseNumber>%s</LicenseNumber>
+					                                        </ID>
+					                                      </IDs>""", name, birthday, gender, address, pedModel, licenseNumber);
 			
 			String filePath = getJarPath() + "/data/currentID.xml";
 			
+			// Write the XML to the file
 			try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
 				writer.write(xmlContent);
-				System.out.println("Random ID updated #" + NumberCount);
+				System.out.println("Random ID updated.");
 			} catch (IOException e) {
 				System.err.println("Error writing XML to file: " + e.getMessage());
 			}
@@ -236,7 +234,9 @@ public class MainController {
 			
 			// Write the generated location data to a file
 			try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
-				writer.write("location="+locationData+"|time="+random.nextInt(1,9)+":"+random.nextInt(1,9)+random.nextInt(1,9)+" PM");
+				writer.write("location=" + locationData + "|time=" + random.nextInt(1, 9) + ":" + random.nextInt(1,
+				                                                                                                 9) + random.nextInt(
+						1, 9) + " PM");
 				System.out.println("Random Location updated: " + locationData);
 			} catch (IOException e) {
 				System.err.println("Error writing game data to file: " + e.getMessage());
@@ -287,7 +287,7 @@ public class MainController {
 			
 			// Create the data string
 			String stopData = String.format(
-					"licensePlate=%s&model=%s&isStolen=%s&isPolice=%s&owner=%s&registration=%s&insurance=%s&color=%s&street=%s&area=%s",
+					"licenseplate=%s&model=%s&isstolen=%s&ispolice=%s&owner=%s&registration=%s&insurance=%s&color=%s&street=%s&area=%s",
 					licensePlate, model, isStolen, isPolice, owner, registration, insurance, color, street, area);
 			
 			String filePath = getJarPath() + "/data/trafficStop.data";
@@ -309,24 +309,18 @@ public class MainController {
 			
 			String name = WPName.getText().trim();
 			
-			// Generate random license number
-			String licenseNumber = String.valueOf(
-					1000000000L + random.nextLong(9000000000L)); // 10-digit license number
+			String licenseNumber = String.valueOf(1000000000L + random.nextLong(9000000000L));
 			
-			// Generate random ped model
 			String[] pedModels = {"A_M_M_TRAMP_01", "A_F_Y_HIPSTER_02", "A_M_Y_BUSINESS_01", "A_F_M_FATWHITE_01", "A_M_Y_LATINO_01", "MP_M_SHOPKEEP_01"};
 			String pedModel = pedModels[random.nextInt(pedModels.length)];
 			
-			// Generate random birthday
-			int year = 1950 + random.nextInt(50); // Year between 1950-1999
+			int year = 1950 + random.nextInt(50);
 			int month = 1 + random.nextInt(12);
 			int day = 1 + random.nextInt(LocalDate.of(year, month, 1).lengthOfMonth());
 			String birthday = month + "/" + day + "/" + year;
 			
-			// Generate random gender
 			String gender = random.nextBoolean() ? "Male" : "Female";
 			
-			// Generate random address
 			String[] streets = {"North Calafia Way", "Grove Street", "Mirror Park Blvd", "Vinewood Blvd", "Senora Rd"};
 			String[] areas = {"Rancho", "Pillbox Hill", "Sandy Shores", "Richman"};
 			String[] counties = {"Los Santos", "Blaine County"};
@@ -334,19 +328,15 @@ public class MainController {
 					streets.length)] + ", " + areas[random.nextInt(areas.length)] + ", " + counties[random.nextInt(
 					counties.length)];
 			
-			// Generate random wanted status
 			String isWanted = wantedTrue.isSelected() ? "True" : "False";
 			
-			// Generate random license status
 			String[] licenseStatuses = {"Valid", "Expired", "Suspended", "None", "Unlicensed"};
 			String licenseStatus = LicRandom.isSelected() ? licenseStatuses[random.nextInt(
 					licenseStatuses.length)] : LicValid.isSelected() ? "Valid" : LicExpired.isSelected() ? "Expired" : LicSuspended.isSelected() ? "Suspended" : LicNone.isSelected() ? "None" : "Unlicensed";
 			
-			// Generate random license expiration date
-			LocalDate expirationDate = LocalDate.now().plusDays(random.nextInt(1000)); // Random future expiration date
+			LocalDate expirationDate = LocalDate.now().plusDays(random.nextInt(1000));
 			String licenseExpiration = expirationDate.format(DateTimeFormatter.ofPattern("MM-dd-yyyy"));
 			
-			// Generate random permit details
 			String[] weaponPermitTypes = {"CcwPermit", "FflPermit"};
 			String weaponPermitType = weaponPermitTypes[random.nextInt(weaponPermitTypes.length)];
 			String weaponPermitStatus = random.nextBoolean() ? "Valid" : "None";
@@ -360,19 +350,15 @@ public class MainController {
 			String huntPermitStatus = "None";
 			String huntPermitExpiration = "";
 			
-			// Generate random legal statuses
 			String isOnParole = "False";
 			String isOnProbation = "False";
 			
-			// Generate times stopped
 			int timesStopped = random.nextInt(10);
 			
-			// Construct formatted output
-			String output = "name=" + name + "&licenseNumber=" + licenseNumber + "&pedModel=" + pedModel + "&birthday=" + birthday + "&gender=" + gender + "&address=" + address + "&isWanted=" + isWanted + "&licenseStatus=" + licenseStatus + "&licenseExpiration=" + licenseExpiration + "&weaponPermitType=" + weaponPermitType + "&weaponPermitStatus=" + weaponPermitStatus + "&weaponPermitExpiration=" + weaponPermitExpiration + "&fishPermitStatus=" + fishPermitStatus + "&fishPermitExpiration=" + fishPermitExpiration + "&huntPermitStatus=" + huntPermitStatus + "&huntPermitExpiration=" + huntPermitExpiration + "&isOnParole=" + isOnParole + "&isOnProbation=" + isOnProbation + "&timesStopped=" + timesStopped + "|";
+			String output = "name=" + name + "&licensenumber=" + licenseNumber + "&pedModel=" + pedModel + "&birthday=" + birthday + "&gender=" + gender + "&address=" + address + "&isWanted=" + isWanted + "&licenseStatus=" + licenseStatus + "&licenseExpiration=" + licenseExpiration + "&weaponPermitType=" + weaponPermitType + "&weaponPermitStatus=" + weaponPermitStatus + "&weaponPermitExpiration=" + weaponPermitExpiration + "&fishPermitStatus=" + fishPermitStatus + "&fishPermitExpiration=" + fishPermitExpiration + "&huntPermitStatus=" + huntPermitStatus + "&huntPermitExpiration=" + huntPermitExpiration + "&isOnParole=" + isOnParole + "&isOnProbation=" + isOnProbation + "&timesStopped=" + timesStopped + "|";
 			
 			String filePath = getJarPath() + "/data/worldPeds.data";
 			
-			// Write the formatted data to a file
 			try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true))) {
 				writer.append(output);
 				System.out.println("Random World Ped updated: " + name);
@@ -410,11 +396,14 @@ public class MainController {
 			// Random police vehicle status
 			String isPolice = random.nextBoolean() ? "True" : "False";
 			
-			// Generate random owner
+			// Generate random owner and address
 			String[] firstNames = {"Carlos", "Jessica", "Michael", "Sarah", "David", "Emily", "Chris", "Anna"};
 			String[] lastNames = {"Casanova", "Smith", "Johnson", "Brown", "Taylor", "Anderson", "Lee", "Wilson"};
+			String[] addresses = {"64 South Shambles St", "35 Elysian Fields Fwy", "79 Popular St", "696 Portola Dr", "401 Mirror Park Blvd", "339 Goma St", "64 South Shambles St", "553 Eclipse Blvd", "359 Ginger St", "65 South Shambles St", "222 San Andreas Ave", "944 Route 68"};
+			
 			String owner = random.nextBoolean() ? firstNames[random.nextInt(
 					firstNames.length)] + " " + lastNames[random.nextInt(lastNames.length)] : "Government";
+			String ownerAddress = random.nextBoolean() ? addresses[random.nextInt(addresses.length)] : "N/A";
 			
 			// Generate random driver
 			String driver = random.nextBoolean() ? firstNames[random.nextInt(
@@ -430,7 +419,7 @@ public class MainController {
 			String color = random.nextInt(256) + "-" + random.nextInt(256) + "-" + random.nextInt(256);
 			
 			// Combine data into the required format
-			String vehicleData = "licensePlate=" + licensePlate + "&model=" + model + "&regexp=" + regExp + "&insexp=" + insExp + "&vin=" + vin + "&isStolen=" + isStolen + "&isPolice=" + isPolice + "&owner=" + owner + "&driver=" + driver + "&registration=" + regStatus + "&insurance=" + insStatus + "&color=" + color + "|";
+			String vehicleData = "licenseplate=" + licensePlate + "&model=" + model + "&regexp=" + regExp + "&insexp=" + insExp + "&vin=" + vin + "&isstolen=" + isStolen + "&ispolice=" + isPolice + "&owner=" + owner + "&owneraddress=" + ownerAddress + "&driver=" + driver + "&registration=" + regStatus + "&insurance=" + insStatus + "&color=" + color + "|";
 			
 			// Write the data to a file
 			String filePath = getJarPath() + "/data/worldCars.data";

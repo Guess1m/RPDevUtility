@@ -154,7 +154,7 @@ public class ServerUtils {
 	private static void startFileWatchers() {
 		String dataPath = FileUtils.getJarPath() + File.separator + "data";
 		watchForFileChanges(dataPath, "callout.xml", "UPDATE_CALLOUT");
-		watchForFileChanges(dataPath, "gameData.data", "UPDATE_LOCATION");
+		watchForFileChanges(dataPath, "gameData.data", "UPDATE_GAME_DATA");
 		watchForFileChanges(dataPath, "worldPeds.data", "UPDATE_WORLD_PED");
 		watchForFileChanges(dataPath, "worldCars.data", "UPDATE_WORLD_VEH");
 		watchForFileChanges(dataPath, "trafficStop.data", "UPDATE_TRAFFIC_STOP");
